@@ -12,6 +12,20 @@ def chebpts(n):
 
     return x,w,v
 
+def getDifferentiationMatrix(x,v):
+    d = [-1, 1]
+    n = int(len(x)) 
+    D = zeros([n, n])
+
+    for i in range(0, n, 1):
+        D[[i], :] = ((v/v[i,0])/(x[i,0]-x)).T
+        D[i, i] = 0.
+        D[i, i] = -sum(D[i, :])        
+
+    D = 2*D/(d[1] - d[0])
+
+    return D
+
 def barywts(n):
     if n == 0:
         v = []
