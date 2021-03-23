@@ -1,5 +1,6 @@
 import numpy as np
 import unittest
+from casadi import *
 from scipy.interpolate import interp1d
 
 from chebfun import chebpts
@@ -29,6 +30,7 @@ class FunctionsTestCase(unittest.TestCase):
         t = chebpts_dom(10, dom)
         print(t)
         print("\n")
+
     def test_inter1d(self):
         print("test_inter1d")
         x = np.array([0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9])
@@ -37,6 +39,21 @@ class FunctionsTestCase(unittest.TestCase):
         f = interp1d(x,y)
         v = f(t)
         print(v)
+        print("\n")
+
+    def test_nlp_solvers(self):
+        print("test_NLP_solvers")
+        x = SX.sym('x')
+        y = SX.sym('y')
+        z = SX.sym('z')
+        nlp = {'x':vertcat(x, y, z), 'f':x**2+100*z**2,'g':z+(1-x)**2-y}
+        S = nlpsol('S', 'ipopt', nlp)
+        r = S(x0 = [2.5, 3.0, 0.75] ,lbg =0, ubg=0)
+        xopt = r['x']
+        print('xopt: ', xopt)
+        print(S)
+        print("\n")
+
 
 unittest.main()
         
