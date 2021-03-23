@@ -12,6 +12,14 @@ def chebpts(n):
 
     return x,w,v
 
+def chebpts_dom(n, dom):
+    [x,w,v] = chebpts(n)
+    t = scaleNodes(x, dom)
+    #not finish, but the result is correct
+    #t = angles(n)
+
+    return t
+
 def getDifferentiationMatrix(x,v):
     d = [-1, 1]
     n = int(len(x)) 
@@ -56,7 +64,7 @@ def quadwts(n):
             j = j + 1
         #print(c)
 
-        #step2:c = [c, c(floor(n/2): -1 : 2)]
+        #step2:c = [c, c(floor(n/2):-1 : 2)]
         # ugly handle like c
         nnn = int(floor(n/2) - 1) 
         cc = ones((1, nnn + nn))
@@ -80,11 +88,14 @@ def quadwts(n):
     return w
 
 def scaleNodes(x, dom):
+    y = zeros((len(x), 1))
     if dom[0] == -1 and dom[1] == 1:
         y = x
         return y
-    
-    y = dom[1]*(x +1)/2 + dom[0]*(1-x)/2
+
+    for i in range (0, len(x), 1):
+        y[i, 0] = dom[1]*(x[i] + 1)/2 + dom[0]*(1 - x[i])/2
+
     return y
 
 def scaleWeights(w, dom):
@@ -93,3 +104,15 @@ def scaleWeights(w, dom):
     
     w = (diff(dom)/2)*w
     return w
+
+def angles(n):
+    if n == 0:
+        out = [] 
+    elif n == 1:
+        out = pi/2
+    else:
+        m = n - 1
+        out = zeros((m, 1))
+        for i in range(m-1, -1, -1):
+            out[i, 0] = i*pi/m
+    return out
