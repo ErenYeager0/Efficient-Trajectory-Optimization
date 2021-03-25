@@ -6,7 +6,7 @@ from scipy.interpolate import interp1d
 from chebfun import chebpts
 from chebfun import getDifferentiationMatrix
 from chebfun import chebpts_dom
-
+from SimpleConstraintFcn import conEq
 
 class FunctionsTestCase(unittest.TestCase):
     def test_chebpts(self):
@@ -54,6 +54,15 @@ class FunctionsTestCase(unittest.TestCase):
         print(S)
         print("\n")
 
+    def test_constraints(self):
+        print("test_constraint_functions")
+        Xc = np.array([1,2,3,4,5,6,7,8,9,10,11,12])
+        nS = 3
+        D = np.array([[1,2,3,4], [5,6,7,8], [9,10,11,12]])
+        scale = 2
+        Xc = conEq(Xc, 0, D, nS, 0, 0, scale)
+        print(Xc, Xc.dtype)
+        print("\n")
 
 unittest.main()
         
